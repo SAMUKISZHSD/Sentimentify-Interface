@@ -74,7 +74,14 @@ export default function SentimentAnalyzer() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to analyze sentiment");
+        const errorData = await response.json().catch(() => ({}));
+        if (response.status === 429) {
+          throw new Error(
+            "Rate limit exceeded. Please try again in a few moments.",
+          );
+        } else {
+          throw new Error(errorData.error || "Failed to analyze sentiment");
+        }
       }
 
       const analysisResult = await response.json();
@@ -96,9 +103,9 @@ export default function SentimentAnalyzer() {
 
       // Refresh history from server
       fetchHistory();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error:", err);
-      setError("Failed to analyze sentiment. Please try again.");
+      setError(err.message || "Failed to analyze sentiment. Please try again.");
     } finally {
       setIsAnalyzing(false);
     }

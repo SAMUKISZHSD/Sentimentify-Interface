@@ -17,18 +17,32 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     // Analyze the sentiment
-    const analysis = await analyzeSentiment(text);
+    try {
+      const analysis = await analyzeSentiment(text);
 
-    // Save to history if user is logged in
-    if (user) {
-      await saveAnalysisToHistory(user.id, analysis);
+      // Save to history if user is logged in
+      if (user) {
+        await saveAnalysisToHistory(user.id, analysis);
+      }
+
+      return NextResponse.json(analysis);
+    } catch (error: any) {
+      console.error("Error in OpenAI API call:", error);
+
+      // Check if it's a rate limit error
+      if (error.message && error.message.includes("rate limit")) {
+        return NextResponse.json(
+          { error: "OpenAI API rate limit exceeded. Please try again later." },
+          { status: 429 },
+        );
+      }
+
+      throw error; // Re-throw for the outer catch block
     }
-
-    return NextResponse.json(analysis);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error in sentiment analysis API:", error);
     return NextResponse.json(
-      { error: "Failed to analyze sentiment" },
+      { error: error.message || "Failed to analyze sentiment" },
       { status: 500 },
     );
   }

@@ -1,31 +1,78 @@
 import { createClient } from "../../supabase/server";
 
+// Helper function to implement exponential backoff
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+  maxRetries = 3,
+) {
+  let retries = 0;
+  let lastError;
+
+  while (retries < maxRetries) {
+    try {
+      const response = await fetch(url, options);
+
+      if (response.status === 429) {
+        // Rate limit exceeded, implement backoff
+        const retryAfter = response.headers.get("retry-after");
+        const delayMs = retryAfter
+          ? parseInt(retryAfter) * 1000
+          : Math.pow(2, retries) * 1000;
+        console.log(`Rate limit exceeded. Retrying after ${delayMs}ms...`);
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+        retries++;
+        continue;
+      }
+
+      return response;
+    } catch (error) {
+      lastError = error;
+      const delayMs = Math.pow(2, retries) * 1000;
+      console.log(`API request failed. Retrying after ${delayMs}ms...`);
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+      retries++;
+    }
+  }
+
+  throw lastError || new Error("Maximum retries reached");
+}
+
 export async function analyzeSentiment(text: string) {
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+    const response = await fetchWithRetry(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are a sentiment analysis expert. Analyze the sentiment of the text and respond with a JSON object containing: sentiment (positive, negative, or neutral), score (a number between 0 and 1 representing confidence), and a brief explanation. Also detect the language of the text.",
+            },
+            {
+              role: "user",
+              content: text,
+            },
+          ],
+          response_format: { type: "json_object" },
+        }),
       },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a sentiment analysis expert. Analyze the sentiment of the text and respond with a JSON object containing: sentiment (positive, negative, or neutral), score (a number between 0 and 1 representing confidence), and a brief explanation. Also detect the language of the text.",
-          },
-          {
-            role: "user",
-            content: text,
-          },
-        ],
-        response_format: { type: "json_object" },
-      }),
-    });
+      3, // Maximum 3 retries
+    );
 
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error(
+          "OpenAI API rate limit exceeded. Please try again later.",
+        );
+      }
       throw new Error(`API request failed with status ${response.status}`);
     }
 
