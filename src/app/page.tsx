@@ -18,22 +18,22 @@ export default async function Home() {
   } = await supabase.auth.getUser();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-950 dark:to-gray-900">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-white pt-24 pb-32">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 opacity-70" />
+      <section className="relative overflow-hidden bg-white pt-24 pb-32 dark:bg-gray-950">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 opacity-70 dark:from-blue-950 dark:via-gray-950 dark:to-purple-950 dark:opacity-30" />
         <div className="relative container mx-auto px-4">
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 mb-8 tracking-tight">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+            <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 mb-8 tracking-tight dark:text-gray-100">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
                 Sentimentify
               </span>{" "}
               - ML-Powered Sentiment Analysis
             </h1>
 
-            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed dark:text-gray-300">
               Analyze the emotional tone of your text with our advanced machine
               learning model. Get instant insights into positive, negative, or
               neutral sentiments.
@@ -42,7 +42,7 @@ export default async function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
                 href="/sentiment"
-                className="inline-flex items-center px-8 py-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors text-lg font-medium"
+                className="inline-flex items-center px-8 py-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors text-lg font-medium dark:bg-blue-700 dark:hover:bg-blue-800"
               >
                 Try It Now
                 <ArrowUpRight className="ml-2 w-5 h-5" />
@@ -50,7 +50,7 @@ export default async function Home() {
 
               <Link
                 href="#features"
-                className="inline-flex items-center px-8 py-4 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors text-lg font-medium"
+                className="inline-flex items-center px-8 py-4 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors text-lg font-medium dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 Learn More
               </Link>
@@ -60,11 +60,13 @@ export default async function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-24 bg-white">
+      <section id="features" className="py-24 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">How Sentimentify Works</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold mb-4 dark:text-gray-100">
+              How Sentimentify Works
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto dark:text-gray-300">
               Our powerful sentiment analysis tool uses advanced NLP techniques
               to understand the emotional tone of text.
             </p>
@@ -97,11 +99,17 @@ export default async function Home() {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow"
+                className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow dark:bg-gray-800 dark:border dark:border-gray-700"
               >
-                <div className="text-blue-600 mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <div className="text-blue-600 mb-4 dark:text-blue-400">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-semibold mb-2 dark:text-gray-100">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
@@ -109,7 +117,7 @@ export default async function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-blue-600 text-white">
+      <section className="py-20 bg-blue-600 text-white dark:bg-blue-800">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 text-center">
             <div>
@@ -129,18 +137,18 @@ export default async function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">
+          <h2 className="text-3xl font-bold mb-4 dark:text-gray-100">
             Ready to Analyze Your Text?
           </h2>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-gray-600 mb-8 max-w-2xl mx-auto dark:text-gray-300">
             Try our sentiment analysis tool today and gain valuable insights
             from your text data.
           </p>
           <Link
             href="/sentiment"
-            className="inline-flex items-center px-6 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center px-6 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors dark:bg-blue-700 dark:hover:bg-blue-800"
           >
             Start Analyzing Now
             <ArrowUpRight className="ml-2 w-4 h-4" />

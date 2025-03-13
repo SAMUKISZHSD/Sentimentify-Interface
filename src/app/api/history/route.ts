@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUserHistory } from "@/lib/openai";
+import { getUserHistory } from "@/lib/sentiment-analyzer";
 import { createClient } from "../../../../supabase/server";
 
 export async function GET(request: NextRequest) {

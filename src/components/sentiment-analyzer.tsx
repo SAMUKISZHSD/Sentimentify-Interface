@@ -252,18 +252,17 @@ export default function SentimentAnalyzer() {
                     How it works
                   </p>
                   <p>
-                    Our sentiment analysis tool leverages OpenAI's ChatGPT to
-                    analyze the emotional tone of text. ChatGPT is a
-                    state-of-the-art large language model trained on diverse
-                    internet text, allowing it to understand complex language
-                    patterns and contextual nuances.
+                    Our sentiment analysis tool uses a rule-based approach to
+                    analyze the emotional tone of text. The system identifies
+                    positive and negative words in your text and calculates a
+                    sentiment score based on their frequency.
                   </p>
                   <p className="mt-2">
-                    The system analyzes contextual cues, negations,
-                    intensifiers, and semantic relationships between words to
-                    provide highly accurate sentiment classification with
-                    confidence scores. It also detects the language of your text
-                    to provide more accurate analysis across multiple languages.
+                    The analyzer examines word patterns, counts positive and
+                    negative terms, and provides a confidence score representing
+                    how strongly the text leans toward a particular sentiment.
+                    It also includes basic language detection for English,
+                    Portuguese, and Spanish texts.
                   </p>
                 </div>
               </div>

@@ -1,16 +1,16 @@
-# Sentimentify - ML-Powered Sentiment Analysis Tool
+# Sentimentify - Sentiment Analysis Tool
 
 ## Overview
 
-Sentimentify is a modern web application that analyzes the emotional tone of text using OpenAI's ChatGPT API. The application provides users with instant insights into whether text has a positive, negative, or neutral sentiment, along with confidence scores and explanations.
+Sentimentify is a modern web application that analyzes the emotional tone of text using a rule-based sentiment analysis engine. The application provides users with instant insights into whether text has a positive, negative, or neutral sentiment, along with confidence scores and explanations.
 
 ## Features
 
 - **Text Analysis**: Enter any text to analyze its emotional tone
-- **ML Processing**: Advanced machine learning model processes your text using OpenAI's API
-- **Sentiment Scoring**: Get precise sentiment scores with confidence metrics
+- **Rule-Based Processing**: Sentiment analysis engine processes your text
+- **Sentiment Scoring**: Get sentiment scores with confidence metrics
 - **Instant Results**: See results in seconds with visual indicators (😊/😐/☹️)
-- **Language Detection**: Automatically detects the language of the input text
+- **Language Detection**: Basic detection for English, Portuguese and Spanish
 - **Analysis History**: View and reload previous analyses (requires authentication)
 - **User Authentication**: Secure sign-up and sign-in functionality
 
@@ -20,7 +20,6 @@ Sentimentify is a modern web application that analyzes the emotional tone of tex
 - **Backend**: Next.js API Routes
 - **Database**: Supabase (PostgreSQL)
 - **Authentication**: Supabase Auth
-- **AI/ML**: OpenAI ChatGPT API
 - **Styling**: Tailwind CSS with shadcn/ui components
 
 ## Getting Started
@@ -30,7 +29,6 @@ Sentimentify is a modern web application that analyzes the emotional tone of tex
 - Node.js (v18 or higher)
 - npm or yarn
 - Supabase account
-- OpenAI API key
 
 ### Installation
 
@@ -41,7 +39,7 @@ Sentimentify is a modern web application that analyzes the emotional tone of tex
    ```
 3. Set up environment variables:
    - Copy `.env.example` to `.env.local`
-   - Add your Supabase and OpenAI API credentials
+   - Add your Supabase credentials
 
 ### Running the Application
 
@@ -54,7 +52,7 @@ The application will be available at http://localhost:3000
 ## Project Structure
 
 - `/src/components/sentiment-analyzer.tsx` - Main sentiment analysis component
-- `/src/lib/openai.ts` - OpenAI API integration
+- `/src/lib/sentiment-analyzer.ts` - Sentiment analysis engine
 - `/src/app/api/sentiment/route.ts` - API endpoint for sentiment analysis
 - `/src/app/api/history/route.ts` - API endpoint for user history
 - `/src/app/sentiment/page.tsx` - Sentiment analysis page

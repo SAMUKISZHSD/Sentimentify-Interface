@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { analyzeSentiment, saveAnalysisToHistory } from "@/lib/openai";
+import {
+  analyzeSentiment,
+  saveAnalysisToHistory,
+} from "@/lib/sentiment-analyzer";
 import { createClient } from "../../../../supabase/server";
 
 export async function POST(request: NextRequest) {
@@ -20,23 +23,21 @@ export async function POST(request: NextRequest) {
     try {
       const analysis = await analyzeSentiment(text);
 
+      // Add the text to the analysis result
+      const fullAnalysis = {
+        ...analysis,
+        text,
+        timestamp: new Date(),
+      };
+
       // Save to history if user is logged in
       if (user) {
-        await saveAnalysisToHistory(user.id, analysis);
+        await saveAnalysisToHistory(user.id, fullAnalysis);
       }
 
-      return NextResponse.json(analysis);
+      return NextResponse.json(fullAnalysis);
     } catch (error: any) {
-      console.error("Error in OpenAI API call:", error);
-
-      // Check if it's a rate limit error
-      if (error.message && error.message.includes("rate limit")) {
-        return NextResponse.json(
-          { error: "OpenAI API rate limit exceeded. Please try again later." },
-          { status: 429 },
-        );
-      }
-
+      console.error("Error in sentiment analysis:", error);
       throw error; // Re-throw for the outer catch block
     }
   } catch (error: any) {
